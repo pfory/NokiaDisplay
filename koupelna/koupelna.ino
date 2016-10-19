@@ -26,7 +26,7 @@ All text above, and the splash screen must be included in any redistribution
 // pin 5 - Data/Command select (D/C)
 // pin 4 - LCD chip select (CS)
 // pin 3 - LCD reset (RST)
-Adafruit_PCD8544 display = Adafruit_PCD8544(3, 4, 5, 7, 6);
+//Adafruit_PCD8544 display = Adafruit_PCD8544(3, 4, 5, 7, 6);
 
 // Hardware SPI (faster, but must use certain hardware pins):
 // SCK is LCD serial clock (SCLK) - this is pin 13 on Arduino Uno
@@ -34,15 +34,24 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(3, 4, 5, 7, 6);
 // pin 5 - Data/Command select (D/C)
 // pin 4 - LCD chip select (CS)
 // pin 3 - LCD reset (RST)
-// Adafruit_PCD8544 display = Adafruit_PCD8544(5, 4, 3);
+ Adafruit_PCD8544 display = Adafruit_PCD8544(5, 4, 3);
 // Note with hardware SPI MISO and SS pins aren't used but will still be read
 // and written to during SPI transfer.  Be careful sharing these pins!
 
-long cislo = 0;
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#define ONE_WIRE_BUS_BOJLER                   2
+OneWire oneWireBojler(ONE_WIRE_BUS_BOJLER);
+DallasTemperature sensorsBojler(&oneWireBojler);
+
+int teplotaBojler = 0;
 
 void setup()   {
   Serial.begin(9600);
-
+  Serial.println("Koupelna v 0.1");
+  sensorsBojler.begin();
+  sensorsBojler.setResolution(12);
+  sensorsBojler.setWaitForConversion(false);
   display.begin();
   // init done
 
@@ -50,112 +59,21 @@ void setup()   {
   // for the best viewing!
   display.setContrast(60);
 
-  //display.display(); // show splashscreen
-  //delay(2000);
   display.clearDisplay();   // clears the screen and buffer
   display.display();
-/*
-  // draw a single pixel
-  display.drawPixel(10, 10, BLACK);
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw many lines
-  testdrawline();
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw rectangles
-  testdrawrect();
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw multiple rectangles
-  testfillrect();
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw mulitple circles
-  testdrawcircle();
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw a circle, 10 pixel radius
-  display.fillCircle(display.width()/2, display.height()/2, 10, BLACK);
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-
-  testdrawroundrect();
-  delay(2000);
-  display.clearDisplay();
-
-  testfillroundrect();
-  delay(2000);
-  display.clearDisplay();
-
-  testdrawtriangle();
-  delay(2000);
-  display.clearDisplay();
-   
-  testfilltriangle();
-  delay(2000);
-  display.clearDisplay();
-
-  // draw the first ~12 characters in the font
-  testdrawchar();
-  display.display();
-  delay(2000);
-  display.clearDisplay();
-*/
-  // text display tests
-  
-
-  
-/*  display.setTextColor(WHITE, BLACK); // 'inverted' text
-  display.println(3.141592);
-  display.setTextSize(2);
-  display.setTextColor(BLACK);
-  display.print("0x"); display.println(0xDEADBEEF, HEX);*/
-/*
-  // rotation example
-  display.clearDisplay();
-  display.setRotation(1);  // rotate 90 degrees counter clockwise, can also use values of 2 and 3 to go further.
-  display.setTextSize(1);
-  display.setTextColor(BLACK);
-  display.setCursor(0,0);
-  display.println("Rotation");
-  display.setTextSize(2);
-  display.println("Example!");
-  display.display();
-  delay(2000);
-
-  // revert back to no rotation
-  display.setRotation(0);
-
-  // miniature bitmap display
-  display.clearDisplay();
-  display.drawBitmap(30, 16,  logo16_glcd_bmp, 16, 16, 1);
-  display.display();
-
-  // invert the display
-  display.invertDisplay(true);
-  delay(1000); 
-  display.invertDisplay(false);
-  delay(1000); 
-
-  // draw a bitmap icon and 'animate' movement
-  testdrawbitmap(logo16_glcd_bmp, LOGO16_GLCD_WIDTH, LOGO16_GLCD_HEIGHT);
-  */
 }
 
 
 void loop() {
+  //mereni
+  sensorsBojler.requestTemperatures();
+  delay(750);
+  if (sensorsBojler.getCheckForConversion()==true) {
+    teplotaBojler = sensorsBojler.getTempCByIndex(0) * 10;
+    Serial.print("Teplota bojler ");
+    Serial.println(teplotaBojler);
+  } 
+  
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(BLACK);
@@ -181,19 +99,19 @@ void loop() {
   display.drawRect(0, display.height()-10, display.width(), 10, BLACK);
 
   //long cislo = cisloom(0,1000);
-  cislo++;
+  //cislo++;
   display.setTextSize(2);
   display.setCursor(4,11);
-  if (cislo<100) {
+  if (teplotaBojler<100) {
     display.print(" ");
   }
-  display.print(cislo/10);
+  display.print(teplotaBojler/10);
   display.setCursor(25,17);
   display.setTextSize(1);
   display.print(".");
-  display.print(cislo%10);
+  display.print(teplotaBojler%10);
   
-  byte delka = 84.0/100.0 * (float)cislo/10;
+  byte delka = 84.0/100.0 * (float)teplotaBojler/10;
   display.fillRect(0, display.height()-9, delka, 8, BLACK);
 
   display.drawRect(52, 0, display.width()-52, 28, BLACK);
@@ -225,10 +143,10 @@ void loop() {
   }
   
   display.display();
-  delay(20);
-  if (cislo>1000) {
+  delay(10000);
+/*   if (cislo>1000) {
     cislo=0;
-  }
+  } */
 }
 
 

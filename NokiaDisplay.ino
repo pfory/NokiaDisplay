@@ -73,7 +73,7 @@ void setup()   {
 
   // you can change the contrast around to adapt the display
   // for the best viewing!
-  display.setContrast(60);
+  display.setContrast(100);
 
   //display.display(); // show splashscreen
   delay(2000);

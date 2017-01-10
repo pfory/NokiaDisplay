@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.7.0">
+<eagle version="7.3.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -98,12 +98,6 @@ http://www.xganon.com</description>
 <pad name="D12" x="8.89" y="3.81" drill="0.8" shape="long"/>
 <pad name="D11" x="8.89" y="1.27" drill="0.8" shape="long"/>
 <pad name="D10" x="8.89" y="-1.27" drill="0.8" shape="long"/>
-<pad name="GND2" x="-5.08" y="29.21" drill="0.8" shape="long" rot="R90"/>
-<pad name="GND3" x="-2.54" y="29.21" drill="0.8" shape="long" rot="R90"/>
-<pad name="VCC1" x="0" y="29.21" drill="0.8" shape="long" rot="R90"/>
-<pad name="RX1-1" x="2.54" y="29.21" drill="0.8" shape="long" rot="R90"/>
-<pad name="TX0-1" x="5.08" y="29.21" drill="0.8" shape="long" rot="R90"/>
-<pad name="DTR" x="7.62" y="29.21" drill="0.8" shape="long" rot="R90"/>
 <pad name="A4" x="-2.54" y="-1.27" drill="0.8" shape="long" rot="R90"/>
 <pad name="A5" x="0" y="-1.27" drill="0.8" shape="long" rot="R90"/>
 <pad name="A6" x="2.54" y="-1.27" drill="0.8" shape="long" rot="R90"/>
@@ -137,12 +131,6 @@ http://www.xganon.com</description>
 <pin name="D12" x="17.78" y="-2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="D11" x="17.78" y="-5.08" visible="pin" length="middle" rot="R180"/>
 <pin name="D10" x="17.78" y="-7.62" visible="pin" length="middle" rot="R180"/>
-<pin name="GND4" x="-7.62" y="35.56" visible="pin" length="middle" rot="R270"/>
-<pin name="GND3" x="-5.08" y="35.56" visible="pin" length="middle" rot="R270"/>
-<pin name="VCC2" x="-2.54" y="35.56" visible="pin" length="middle" rot="R270"/>
-<pin name="RX1-1" x="0" y="35.56" visible="pin" length="middle" rot="R270"/>
-<pin name="TX0-1" x="2.54" y="35.56" visible="pin" length="middle" rot="R270"/>
-<pin name="DTR" x="5.08" y="35.56" visible="pin" length="middle" rot="R270"/>
 <pin name="A4" x="-5.08" y="-17.78" visible="pin" length="middle" rot="R90"/>
 <pin name="A5" x="-2.54" y="-17.78" visible="pin" length="middle" rot="R90"/>
 <pin name="A6" x="0" y="-17.78" visible="pin" length="middle" rot="R90"/>
@@ -184,20 +172,14 @@ www.betemcu.cu</description>
 <connect gate="G$1" pin="D7" pad="D7"/>
 <connect gate="G$1" pin="D8" pad="D8"/>
 <connect gate="G$1" pin="D9" pad="D9"/>
-<connect gate="G$1" pin="DTR" pad="DTR"/>
 <connect gate="G$1" pin="GND" pad="GND"/>
 <connect gate="G$1" pin="GND2" pad="GND1"/>
-<connect gate="G$1" pin="GND3" pad="GND3"/>
-<connect gate="G$1" pin="GND4" pad="GND2"/>
 <connect gate="G$1" pin="RAW" pad="RAW"/>
 <connect gate="G$1" pin="RST" pad="RST"/>
 <connect gate="G$1" pin="RST2" pad="RST1"/>
 <connect gate="G$1" pin="RX1" pad="RX1"/>
-<connect gate="G$1" pin="RX1-1" pad="RX1-1"/>
 <connect gate="G$1" pin="TX0" pad="TX0"/>
-<connect gate="G$1" pin="TX0-1" pad="TX0-1"/>
 <connect gate="G$1" pin="VCC" pad="VCC"/>
-<connect gate="G$1" pin="VCC2" pad="VCC1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -4386,7 +4368,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="DS18B20" gate="-2" x="121.92" y="55.88" rot="R180"/>
 <instance part="DS18B20" gate="-3" x="121.92" y="60.96" rot="R180"/>
 <instance part="P+2" gate="1" x="99.06" y="60.96" rot="R90"/>
-<instance part="GND2" gate="1" x="114.3" y="45.72"/>
+<instance part="GND2" gate="1" x="114.3" y="53.34"/>
 <instance part="SI7021" gate="G$1" x="91.44" y="78.74" rot="R270"/>
 <instance part="P+3" gate="1" x="88.9" y="71.12" rot="R180"/>
 <instance part="GND3" gate="1" x="91.44" y="68.58"/>
@@ -4396,7 +4378,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="GND4" gate="1" x="116.84" y="25.4"/>
 <instance part="R1" gate="G$1" x="106.68" y="55.88" rot="R90"/>
 <instance part="SL2" gate="G$1" x="106.68" y="33.02" rot="R180"/>
-<instance part="P+5" gate="1" x="10.16" y="48.26" rot="R90"/>
+<instance part="P+5" gate="1" x="58.42" y="40.64" rot="R180"/>
 <instance part="GND5" gate="1" x="58.42" y="50.8"/>
 </instances>
 <busses>
@@ -4463,12 +4445,6 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="76.2" y="40.64"/>
 </segment>
 <segment>
-<pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="114.3" y1="48.26" x2="114.3" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="DS18B20" gate="-1" pin="KL"/>
-<wire x1="114.3" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="SI7021" gate="G$1" pin="2"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="91.44" y1="71.12" x2="91.44" y2="73.66" width="0.1524" layer="91"/>
@@ -4481,6 +4457,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="U$1" gate="G$1" pin="GND"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="53.34" y1="53.34" x2="58.42" y2="53.34" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="DS18B20" gate="-2" pin="KL"/>
+<pinref part="GND2" gate="1" pin="GND"/>
+<wire x1="116.84" y1="55.88" x2="114.3" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -4506,8 +4487,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="P+4" gate="1" pin="+5V"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="GND2"/>
+<pinref part="U$1" gate="G$1" pin="VCC"/>
 <pinref part="P+5" gate="1" pin="+5V"/>
+<wire x1="53.34" y1="48.26" x2="58.42" y2="48.26" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="48.26" x2="58.42" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SCL" class="0">
@@ -4539,10 +4522,14 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <net name="N$8" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="106.68" y1="50.8" x2="111.76" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="111.76" y1="50.8" x2="111.76" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="DS18B20" gate="-2" pin="KL"/>
-<wire x1="111.76" y1="55.88" x2="116.84" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="DS18B20" gate="-1" pin="KL"/>
+<wire x1="106.68" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="10.16" x2="91.44" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="50.8" x2="106.68" y2="50.8" width="0.1524" layer="91"/>
+<junction x="106.68" y="50.8"/>
+<pinref part="U$1" gate="G$1" pin="D9"/>
+<wire x1="12.7" y1="27.94" x2="12.7" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="12.7" y1="10.16" x2="91.44" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

@@ -19,6 +19,7 @@ All text above, and the splash screen must be included in any redistribution
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
+#include <SI7021.h>
 
 // Software SPI (slower updates, more flexible pin options):
 // pin 7 - Serial clock out (SCLK)
@@ -39,21 +40,29 @@ All text above, and the splash screen must be included in any redistribution
 // and written to during SPI transfer.  Be careful sharing these pins!
 
 #include <OneWire.h>
+#include <Wire.h>
 #include <DallasTemperature.h>
-#define ONE_WIRE_BUS_BOJLER                   2
+#define ONE_WIRE_BUS_BOJLER                   9
 OneWire oneWireBojler(ONE_WIRE_BUS_BOJLER);
 DallasTemperature sensorsBojler(&oneWireBojler);
 
+#define TEMPERATURE_DIVIDOR 100
+#define SERIAL_SPEED 115200
+
+float teplota;
+float vlhkost;
+
 int teplotaBojler = 0;
+SI7021 sensor;
 
 void setup()   {
-  Serial.begin(9600);
+  Serial.begin(SERIAL_SPEED);
   Serial.println("Koupelna v 0.1");
   sensorsBojler.begin();
   sensorsBojler.setResolution(12);
   sensorsBojler.setWaitForConversion(false);
   display.begin();
-  // init done
+  sensor.begin();
 
   // you can change the contrast around to adapt the display
   // for the best viewing!
@@ -71,8 +80,18 @@ void loop() {
   if (sensorsBojler.getCheckForConversion()==true) {
     teplotaBojler = sensorsBojler.getTempCByIndex(0) * 10;
     Serial.print("Teplota bojler ");
-    Serial.println(teplotaBojler);
+    Serial.println(teplotaBojler/10);
   } 
+  teplota=sensor.getCelsiusHundredths()/TEMPERATURE_DIVIDOR;
+  vlhkost=sensor.getHumidityPercent();
+
+  Serial.print("Teplota:");
+  Serial.print(teplota/TEMPERATURE_DIVIDOR);
+  Serial.println("C");
+  Serial.print("Vlhkost");
+  Serial.print(vlhkost);
+  Serial.println("%");
+
   
   display.clearDisplay();
   display.setTextSize(1);
@@ -118,10 +137,10 @@ void loop() {
   display.drawRect(0, 0, 53, 28, BLACK);
   display.setTextSize(1);
   display.setCursor(56,4);
-  display.print(100);
+  display.print((int)vlhkost);
   display.print("%");
   display.setCursor(58,16);
-  display.print(28);
+  display.print((int)teplota);
   display.print((char)247);
   display.print("C");
 

@@ -55,6 +55,8 @@ float vlhkost;
 int teplotaBojler = 0;
 SI7021 sensor;
 
+byte delka; 
+
 void setup()   {
   Serial.begin(SERIAL_SPEED);
   Serial.println("Koupelna v 0.1");
@@ -119,22 +121,26 @@ void loop() {
 
   //long cislo = cisloom(0,1000);
   //cislo++;
-  display.setTextSize(2);
-  display.setCursor(4,11);
-  if (teplotaBojler<100) {
-    display.print(" ");
-  }
-  display.print(teplotaBojler/10);
-  display.setCursor(25,17);
-  display.setTextSize(1);
-  display.print(".");
-  display.print(teplotaBojler%10);
   
-  byte delka = 84.0/100.0 * (float)teplotaBojler/10;
-  display.fillRect(0, display.height()-9, delka, 8, BLACK);
+  if (teplotaBojler>0) {
+    display.setTextSize(2);
+    display.setCursor(4,11);
+    if (teplotaBojler<100) {
+      display.print(" ");
+    }
+    display.print(teplotaBojler/10);
+    display.setCursor(25,17);
+    display.setTextSize(1);
+    display.print(".");
+    display.print(teplotaBojler%10);
+    
+    delka = 84.0/100.0 * (float)teplotaBojler/10;
+    display.fillRect(0, display.height()-9, delka, 8, BLACK);
 
-  display.drawRect(52, 0, display.width()-52, 28, BLACK);
-  display.drawRect(0, 0, 53, 28, BLACK);
+    display.drawRect(52, 0, display.width()-52, 28, BLACK);
+    display.drawRect(0, 0, 53, 28, BLACK);
+  }
+  
   display.setTextSize(1);
   display.setCursor(56,4);
   display.print((int)vlhkost);
@@ -144,21 +150,22 @@ void loop() {
   display.print((char)247);
   display.print("C");
 
-  
-  if (delka>21) {
-    display.drawRect(22, display.height()-9, 1, 8, WHITE);
-  } else {
-    display.drawRect(21, display.height()-9, 1, 8, BLACK);
-  }
-  if (delka>42) {
-    display.drawRect(43, display.height()-9, 1, 8, WHITE);
-  } else {
-    display.drawRect(42, display.height()-9, 1, 8, BLACK);
-  }
-  if (delka>63) {
-    display.drawRect(64, display.height()-9, 1, 8, WHITE);
-  } else {
-    display.drawRect(63, display.height()-9, 1, 8, BLACK);
+  if (teplotaBojler>0) {
+    if (delka>21) {
+      display.drawRect(22, display.height()-9, 1, 8, WHITE);
+    } else {
+      display.drawRect(21, display.height()-9, 1, 8, BLACK);
+    }
+    if (delka>42) {
+      display.drawRect(43, display.height()-9, 1, 8, WHITE);
+    } else {
+      display.drawRect(42, display.height()-9, 1, 8, BLACK);
+    }
+    if (delka>63) {
+      display.drawRect(64, display.height()-9, 1, 8, WHITE);
+    } else {
+      display.drawRect(63, display.height()-9, 1, 8, BLACK);
+    }
   }
   
   display.display();

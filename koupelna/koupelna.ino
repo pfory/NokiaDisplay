@@ -19,7 +19,7 @@ All text above, and the splash screen must be included in any redistribution
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
-#include <SI7021.h>
+#include <Adafruit_Si7021.h>
 
 // Software SPI (slower updates, more flexible pin options):
 // pin 7 - Serial clock out (SCLK)
@@ -46,20 +46,20 @@ All text above, and the splash screen must be included in any redistribution
 OneWire oneWireBojler(ONE_WIRE_BUS_BOJLER);
 DallasTemperature sensorsBojler(&oneWireBojler);
 
-#define TEMPERATURE_DIVIDOR 100
 #define SERIAL_SPEED 115200
 
 float teplota;
 float vlhkost;
 
 int teplotaBojler = 0;
-SI7021 sensor;
+Adafruit_Si7021 sensor = Adafruit_Si7021();
+int teplotaBojlerOld;
 
 byte delka; 
 
 void setup()   {
   Serial.begin(SERIAL_SPEED);
-  Serial.println("Koupelna v 0.1");
+  Serial.println("Koupelna v 0.2");
   sensorsBojler.begin();
   sensorsBojler.setResolution(12);
   sensorsBojler.setWaitForConversion(false);
@@ -77,6 +77,7 @@ void setup()   {
 
 void loop() {
   //mereni
+    
   sensorsBojler.requestTemperatures();
   delay(750);
   if (sensorsBojler.getCheckForConversion()==true) {
@@ -84,11 +85,18 @@ void loop() {
     Serial.print("Teplota bojler ");
     Serial.println(teplotaBojler/10);
   } 
-  teplota=sensor.getCelsiusHundredths()/TEMPERATURE_DIVIDOR;
-  vlhkost=sensor.getHumidityPercent();
-
+  if (teplotaBojler==-1270) {
+    teplotaBojler = teplotaBojlerOld;
+  } else {
+    teplotaBojlerOld = teplotaBojler;
+  }
+  
+  
+  teplota = sensor.readTemperature();
+  vlhkost = sensor.readHumidity();
+  
   Serial.print("Teplota:");
-  Serial.print(teplota/TEMPERATURE_DIVIDOR);
+  Serial.print(teplota);
   Serial.println("C");
   Serial.print("Vlhkost");
   Serial.print(vlhkost);
@@ -119,60 +127,48 @@ void loop() {
 
   display.drawRect(0, display.height()-10, display.width(), 10, BLACK);
 
-  //long cislo = cisloom(0,1000);
-  //cislo++;
-  
+  display.setTextSize(2);
+  display.setCursor(4,11);
   if (teplotaBojler>0) {
-    display.setTextSize(2);
-    display.setCursor(4,11);
-    if (teplotaBojler<100) {
-      display.print(" ");
-    }
     display.print(teplotaBojler/10);
     display.setCursor(25,17);
     display.setTextSize(1);
     display.print(".");
     display.print(teplotaBojler%10);
-    
     delka = 84.0/100.0 * (float)teplotaBojler/10;
-    display.fillRect(0, display.height()-9, delka, 8, BLACK);
-
-    display.drawRect(52, 0, display.width()-52, 28, BLACK);
-    display.drawRect(0, 0, 53, 28, BLACK);
   }
+  
+  display.fillRect(0, display.height()-9, delka, 8, BLACK);
+
+  display.drawRect(52, 0, display.width()-52, 28, BLACK);
+  display.drawRect(0, 0, 53, 28, BLACK);
   
   display.setTextSize(1);
   display.setCursor(56,4);
-  display.print((int)vlhkost);
+  display.print(round(vlhkost));
   display.print("%");
   display.setCursor(58,16);
-  display.print((int)teplota);
+  display.print(round(teplota));
   display.print((char)247);
   display.print("C");
 
-  if (teplotaBojler>0) {
-    if (delka>21) {
-      display.drawRect(22, display.height()-9, 1, 8, WHITE);
-    } else {
-      display.drawRect(21, display.height()-9, 1, 8, BLACK);
-    }
-    if (delka>42) {
-      display.drawRect(43, display.height()-9, 1, 8, WHITE);
-    } else {
-      display.drawRect(42, display.height()-9, 1, 8, BLACK);
-    }
-    if (delka>63) {
-      display.drawRect(64, display.height()-9, 1, 8, WHITE);
-    } else {
-      display.drawRect(63, display.height()-9, 1, 8, BLACK);
-    }
+  if (delka>21) {
+    display.drawRect(22, display.height()-9, 1, 8, WHITE);
+  } else {
+    display.drawRect(21, display.height()-9, 1, 8, BLACK);
+  }
+  if (delka>42) {
+    display.drawRect(43, display.height()-9, 1, 8, WHITE);
+  } else {
+    display.drawRect(42, display.height()-9, 1, 8, BLACK);
+  }
+  if (delka>63) {
+    display.drawRect(64, display.height()-9, 1, 8, WHITE);
+  } else {
+    display.drawRect(63, display.height()-9, 1, 8, BLACK);
   }
   
   display.display();
-  delay(10000);
-/*   if (cislo>1000) {
-    cislo=0;
-  } */
 }
 
 
